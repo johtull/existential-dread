@@ -30,8 +30,17 @@ LoadMapJS = {
 								continue;
 							}else if(typeof keyMap[mapChar] !== 'undefined') {
 								let tmpTile = keyMap[mapChar];
-								tmpTile.x = w * 32;
-								tmpTile.y = (h - mapStartH) * 32;
+								if(typeof tmpTile.offsetX !== 'undefined') {
+									tmpTile.x = w * 32 + tmpTile.offsetX;
+								}else {
+									tmpTile.x = w * 32;
+								}
+								if(typeof tmpTile.offsetY !== 'undefined') {
+									tmpTile.y = ((h - mapStartH) * 32) + tmpTile.offsetY;
+								}else {
+									tmpTile.y = (h - mapStartH) * 32;
+								}
+								
 								tileMap.push(Object.assign({}, tmpTile));
 							}else {
 								continue;

@@ -1,7 +1,7 @@
 b={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":true,"type":"","img":2}
 C={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":true,"type":"","img":0}
 c={"x":0,"y":0,"sizeX":32,"sizeY":16,"isSolid":true,"type":"","img":1}
-<={"x":0,"y":0,"sizeX":32,"sizeY":16,"isSolid":true,"type":"","img":1}
+<={"x":0,"y":0,"sizeX":32,"sizeY":16,"isSolid":true,"type":"","img":1,"offsetY":16}
 1={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":false,"type":"lantern","img":9}
 2={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":false,"type":"lantern","img":10}
 3={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":false,"type":"lantern","img":11}
