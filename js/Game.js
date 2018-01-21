@@ -95,6 +95,8 @@ function initGame() {
 	
 	canvas.background = new Image();
 	canvas.background.src = bg_imgs[map.img];
+	
+	LoadMapJS.load32Map('maps/map1.txt');
 
 	main();
 }
@@ -152,6 +154,8 @@ function updatePlayer() {
 	} */
 	if(map.y < 0) {
 		map.y = 0;
+	} else if(map.y > map.floorY - map.screenY) {
+		map.y = map.floorY - map.screenY;
 	}
 	/* else if(map.y > (map.floorY/2) + 32) {
 		map.y = (map.floorY/2) + 32;
@@ -269,8 +273,11 @@ function collision() {
 						   player.batteryCharge += player.batteryRefill;
 					   }else if(tile.type === 'lantern') {
 						   player.lanternParts++;
+					   }else if(tile.type === 'door') {
+						   LoadMapJS.load32Map(map.nextMap);
 					   }
 					   map.tiles.splice(i,1);
+					   playSound('gong');
 				   }
 			}
 		}

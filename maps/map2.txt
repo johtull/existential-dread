@@ -1,3 +1,13 @@
+%={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":true,"type":"","img":8}
+E={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":true,"type":"","img":6}
+e={"x":0,"y":0,"sizeX":32,"sizeY":16,"isSolid":true,"type":"","img":7}
+&={"x":0,"y":0,"sizeX":32,"sizeY":16,"isSolid":true,"type":"","img":7,"offsetY":16}
+~={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":false,"type":"battery","img":14}
+F={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":false,"type":"","img":16}
+#={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":false,"type":"door","img":15}
+MAP={"width":64,"height":64,"x":576,"y":1728,"floorX":2048,"floorY":2048,"img":1,"nextMap":"maps/map3.txt"}
+SPAWN={"x":30,"y":62,"mod":32}
+START
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %    ~                     ~                                & ~%
 %   EE        EEEEEEEEEEEEEEEEEEEEEEEEEEEEEE              EEEE %

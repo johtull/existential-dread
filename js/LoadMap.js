@@ -1,6 +1,9 @@
 LoadMapJS = {
 	// LoadMapJS.load32Map('maps/map1.txt');
 	load32Map:function(path) {
+		if(typeof path === 'undefined' || path === '') {
+			return;
+		}
 		let tileMap = [];
 		let keyMap = {};
 		fetch(path)
@@ -54,6 +57,7 @@ LoadMapJS = {
 				map.floorX = keyMap['MAP'].floorX;
 				map.floorY = keyMap['MAP'].floorY;
 				map.img = keyMap['MAP'].img;
+				map.nextMap = keyMap['MAP'].nextMap;
 				map.tiles = tileMap;
 			
 				player.x = keyMap['SPAWN'].x * keyMap['SPAWN'].mod;

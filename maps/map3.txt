@@ -1,3 +1,9 @@
+B={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":true,"type":"","img":5}
+D={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":true,"type":"","img":3}
+~={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":false,"type":"battery","img":14}
+MAP={"width":64,"height":18,"x":0,"y":96,"floorX":2048,"floorY":576,"img":2,"nextMap":""}
+SPAWN={"x":2,"y":8,"mod":32}
+START
 BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
 B                                                              B
 B    ~                                                         B

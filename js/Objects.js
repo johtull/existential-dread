@@ -1,10 +1,11 @@
-var debug = true;
+var debug = false;
 
 var canvas = {};
 var ctx = {};
 
 var isGameOver = false;
 var isPaused = false;
+var isSoundEnabled = true;
 
 var wasd = [false, false, false, false];
 
@@ -70,6 +71,7 @@ var map = {
 	gravityOn: true,
 	gravitySpeed: 15,
 	img: 0,
+	nextMap: '',
 	tiles: []
 };
 
@@ -90,4 +92,33 @@ var player = {
 	batteryRefill: 50
 };
 
-LoadMapJS.load32Map('maps/map1.txt', 64, 18);
+
+function playSound(sound) {
+	if(isSoundEnabled) {
+		eval(sound).pause();
+		eval(sound).currentTime = 0;
+		eval(sound).play();
+	}
+}
+function loopSound(sound) {
+	if(isSoundEnabled) {
+		eval(sound).loop = true;
+		eval(sound).currentTime = 0;
+		eval(sound).play();
+	}
+}
+function stopSound(sound) {
+	eval(sound).pause();
+	eval(sound).currentTime = 0;
+}
+
+// sfx
+var gong = new Audio('audio/sfx/clank.wav');
+
+// music
+var music_lobby = new Audio('audio/music/existential_dread_0.wav');
+loopSound('music_lobby');
+
+/* var music_level_1 = new Audio('audio/music/hopeless_.mp3');
+var music_level_2 = new Audio('audio/music/existential_dread_0.mp3');
+var music_level_3 = new Audio('audio/music/existential_dread_0.mp3'); */
