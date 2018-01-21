@@ -43,7 +43,7 @@ function init() {
 				if(!isPaused) {
 					main();
 				}else {
-					renderPauseBox();
+					renderPause();
 				}
 				break;
 			default:
@@ -146,14 +146,16 @@ function updatePlayer() {
 	// camera corrections
 	if(map.x < 0) {
 		map.x = 0;
-	}else if(map.x > (map.floorX/2) + player.sizeX) {
-		map.x = (map.floorX/2) + player.sizeX;
 	}
+	/* else if(map.x > (map.floorX/2) + player.sizeX) {
+		map.x = (map.floorX/2) + player.sizeX;
+	} */
 	if(map.y < 0) {
 		map.y = 0;
-	}else if(map.y > (map.floorY/2) + 32) {
-		map.y = (map.floorY/2) + 32;
 	}
+	/* else if(map.y > (map.floorY/2) + 32) {
+		map.y = (map.floorY/2) + 32;
+	} */
 	
 	// direction increment || boundary enforcement
 	// reset player speed modifiers
@@ -200,8 +202,8 @@ function updatePlayer() {
 function collision() {
 	
 	for(var i = 0; i < map.tiles.length; i++) {
-		if(map.tiles[i].isSolid) {
-			let tile = map.tiles[i];
+		let tile = map.tiles[i];
+		if(tile.isSolid) {
 			// top of object
 			if((player.x + player.sizeX > tile.x) &&
 			   (player.x < tile.x + tile.sizeX) &&
@@ -256,6 +258,21 @@ function collision() {
 					   player.x = tile.x - player.sizeX;
 				   }
 			    }
+		// non-solids - items
+		}else if(!tile.isSolid) {
+			if(tile.type !== '') {
+				if((player.x < tile.x + tile.sizeX) &&
+				   (player.x + player.sizeX > tile.x) &&
+				   (player.y < tile.y + tile.sizeY) &&
+				   (player.y + player.sizeY > tile.y)) {
+					   if(tile.type === 'battery') {
+						   player.batteryCharge += player.batteryRefill;
+					   }else if(tile.type === 'lantern') {
+						   player.lanternParts++;
+					   }
+					   map.tiles.splice(i,1);
+				   }
+			}
 		}
 	}
 }
@@ -290,4 +307,15 @@ function draw() {
 	//p_ctx.strokeText('Score: ' + player.points, 20, 80);
 	
 	ctx.drawImage(p_cvs, 0, 0, canvas.width, canvas.height);
+}
+
+function renderPause() {
+	ctx.fillStyle = '#000000';
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+	ctx.fillStyle = '#FF0000';
+	ctx.font = '64px Verdana';
+	ctx.textAlign = 'center';
+	ctx.fillText('PAUSED', canvas.width/2, canvas.height/2);
+	ctx.font = '16px Verdana';
+	ctx.fillText('PRESS P TO RESUME', canvas.width/2, canvas.height/2 + 32);
 }

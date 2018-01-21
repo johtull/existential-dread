@@ -1,6 +1,5 @@
 var debug = true;
 
-
 var canvas = {};
 var ctx = {};
 
@@ -9,35 +8,24 @@ var isPaused = false;
 
 var wasd = [false, false, false, false];
 
+function loadImage(path, x, y) {
+	let tmp = new Image(x, y);
+	tmp.src = path;
+	return tmp;
+}
+
 var bg_imgs = [];
-let tmp = new Image(2048, 576);
-tmp.src = 'img/bgs/level_1.png';
-bg_imgs.push(tmp);
-
-tmp = new Image(2048, 2048);
-tmp.src = 'img/bgs/level_2.png';
-bg_imgs.push(tmp);
-
-tmp = new Image(2048, 576);
-tmp.src = 'img/bgs/level_3.png';
-bg_imgs.push(tmp);
+bg_imgs.push(loadImage('img/bgs/level_1.png', 2048, 576));
+bg_imgs.push(loadImage('img/bgs/level_2.png', 2048, 2048));
+bg_imgs.push(loadImage('img/bgs/level_3.png', 2048, 576));
 
 var player_imgs = [];
-
-tmp = new Image(32, 32);
-tmp.src = 'img/player/player.png';
-player_imgs.push(tmp);
+player_imgs.push(loadImage('img/player/player.png', 32, 32));
 
 var tile_imgs = [];
-
-tmp = new Image(32, 32);
-tmp.src = 'img/tiles/floor.png';
-tile_imgs.push(tmp);
-
-tmp = new Image(32, 32);
-tmp.src = 'img/tiles/oomlie.png';
-tile_imgs.push(tmp);
-
+tile_imgs.push(loadImage('img/tiles/floor.png', 32, 32));
+tile_imgs.push(loadImage('img/tiles/oomlie.png', 32, 32));
+tile_imgs.push(loadImage('img/tiles/ThomasMural.png', 32, 32));
 
 
 var tile = {
@@ -47,6 +35,7 @@ var tile = {
 	sizeY: 32,
 	isSolid: true,
 	//isStatic: true,
+	type: '',
 	img: 0
 };
 
@@ -76,11 +65,14 @@ var player = {
 	defaultSprintSpeed: 10,
 	isSprinting: false,
 	isJumping: false,
-	vertSpeed: 0
+	vertSpeed: 0,
+	lanternParts: 0,
+	batteryCharge: 0,
+	batteryRefill: 50
 };
 
-
-
+LoadMapJS.loadMap('maps/map1.txt', 64, 18);
+/*
 // test load map
 for(var h = 0; h < 32; h++) {
 	if(h === 0 || h === 31) {
@@ -142,10 +134,21 @@ for(var h = 29; h >= 0; h--) {
 	}
 }
 map.tiles.push({
-	x: 3 * 32,
-	y: 5 * 32,
+	x: 1 * 32,
+	y: 30 * 32,
 	sizeX: 32,
 	sizeY: 32,
 	isSolid: false,
+	type: 'lantern',
 	img: 1
 });
+map.tiles.push({
+	x: 6 * 32,
+	y: 30 * 32,
+	sizeX: 32,
+	sizeY: 32,
+	isSolid: false,
+	type: 'battery',
+	img: 1
+});
+*/
