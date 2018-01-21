@@ -1,0 +1,5 @@
+LoadMapJS = {
+	loadMap:function(file) {
+		
+	}
+};

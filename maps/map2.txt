@@ -1,0 +1,64 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    ~                     ~                                & ~%
+%   EE        EEEEEEEEEEEEEEEEEEEEEEEEEEEEEE              EEEE %
+%            FE                             E            E     %
+%            EE        e                     E          E      %
+%E            E         E          E                           %
+%E     E                E        EEEEEE             E          %
+%      EF       EFFE    E          E     F                     %
+%      EE       eEEe    E    #     E     EEE                   %
+%     EE                EEEEEEEEEEEE                        ~  %
+%                                                          EEEE%
+%                                                E FF E        %
+%   F                      EEEEEEEEEEEEEE        eEEEEe        %
+%   E         E    E                                           %
+%   E                   E                                      %
+%F                ~         EEEEEEE     E                      %
+%E                E        E           E     EEEEEE            %
+%EEEEE               E     E   EEEEEEEE   Ee                   %
+%              E           E             Ee       EEEEEE       %
+%                        EEE           EEe                 EE  %
+%           E              EE   ~   eEEEE                EEE   %
+%  EEEEEEEEEEEEEEEEEEEEE   EEEEEEEEEE    E             EEE     %
+%            E                  EEEEEEEEEEE                    %
+%            EEEEE     EEEEE                 &E              EE%
+%            E                              &E     EEEE        %
+%EEEEEE    EEEEEEEEEEEEEEEEEEEEE   EEEEEEEEEEEEEEEEEEEEEEEEEEEE%
+%                                                              %
+%                                E                   ~         %
+%EEEEEEEEEEE   EEEEEEEEEEEE      EEEEEEEEEEEEEEEEEEEEEEEEEEEEEE%
+%                                                              %
+%                                E                             %
+%EEEEEEEEEEEEEEEEEEEEEE    EEEEEEEEEEEEEEEE   EEEEEEEE    EEEEE%
+%             E                               E                %
+%                E       ~                    E     &  F       %
+%   EEEEEEEE     EE    EEEEEEEEEEEEEEE   EEEEEE      EEEEEE    %
+%                E                            E      E         %
+%EE            EEE                            E      E         %
+% E              E  EEE      EEE              E      E     ~   %
+% EEEE           E   E        E       EEE     E      E     EFFE%
+%                E                     E      EEE    E     EEEE%
+%           F    E     EEE                    E      E         %
+%          EE    E      E       EEE           E    EEE         %
+%                E               E            E      E         %
+%    F           E                      EEE   EEE    E         %
+%   EE           E                       E    E      E  EFFE   %
+%                E           EEE              E    EEE  EEEE   %
+%                E  EEE                       E      E         %
+%                E   E                        E      E         %
+%F              FE                   EEE      E      E        F%
+%EEE          EEEEEEEEE            EEEEEEEEEEEEEEE       EEEEEE%
+%       EE             EEEE    EEEE                  EE        %
+%       EE                                           EE        %
+%       EE                                           EE        %
+%       EE                                           EE        %
+%       EE                                           EE        %
+%     FFEEFF                 F                     FFEEFF      %
+%   EEEEeeEEEE              &E&                  EEEEeeEEEE    %
+%       &&                  E E                      &&        %
+%       EE                 e E e                     EE        %
+%E      EE               &e  E  e&                   EE       E%
+%EEEEE      EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE      EEEEEE%
+%                                                              %
+%       ~                    s                        ~        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
