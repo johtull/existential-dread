@@ -1,16 +1,14 @@
 LoadMapJS = {
-	// file path, width / 32, height / 32
-	// LoadMapJS.loadMap('maps/map1.txt', 64, 18);
-	loadMap:function(path, width, height) {
+	// LoadMapJS.load32Map('maps/map1.txt');
+	load32Map:function(path) {
 		let tileMap = [];
+		let keyMap = {};
 		fetch(path)
 			.then(function(resp) {
 				return resp.text();
 			})
 			.then(function(text) {
 				let txtMap = text.replace(/\r/g, '').split('\n');
-				let keyMap = {};
-				
 				let parseMap = false;
 				let mapStartH = 0;
 				
@@ -21,48 +19,36 @@ LoadMapJS = {
 						}else if(txtMap[h] === 'START') {
 							parseMap = true;
 							mapStartH = h + 1;
-							console.log(h);
-							console.log(txtMap.length);
 						}else {
 							let key = txtMap[h].split('=');
-							keyMap[key[0]] = JSON.parse(JSON.stringify(key[1]));
+							keyMap[key[0].toString()] = JSON.parse(key[1].toString());
 						}
-					}else {
-						for(var w = 0; w < width; w++) {
-							let mapChar = txtMap[mapStartH].charAt(w);
+					} else {
+						for(var w = 0; w < keyMap['MAP'].width; w++) {
+							let mapChar = txtMap[h].charAt(w).toString();
 							if(mapChar === ' ') {
 								continue;
 							}else if(typeof keyMap[mapChar] !== 'undefined') {
-								let tmpTile = JSON.parse(keyMap[mapChar].toString());
+								let tmpTile = keyMap[mapChar];
 								tmpTile.x = w * 32;
 								tmpTile.y = (h - mapStartH) * 32;
-								tileMap.push(tmpTile);
+								tileMap.push(Object.assign({}, tmpTile));
 							}else {
 								continue;
 							}
 						}
 					}
 				}
-			});
-		map = {
-			x: 1408,
-			y: 0,
-			floorX: 2048,
-			floorY: 576,
-			screenX: 640,
-			screenY: 480,
-			collisionThresholdX: 10,
-			clippingX: 1.01,
-			gravityOn: false,
-			gravitySpeed: 15,
-			img: 0,
-			tiles: tileMap
-		};
-		
-		// add player config to txt file
-		player.x = 62 * 32;
-		player.y = 16 * 32;
-		
-		//console.log(tileMap);
-	}
+				
+				map.x = keyMap['MAP'].x;
+				map.y = keyMap['MAP'].y;
+				map.floorX = keyMap['MAP'].floorX;
+				map.floorY = keyMap['MAP'].floorY;
+				map.img = keyMap['MAP'].img;
+				map.tiles = tileMap;
+			
+				player.x = keyMap['SPAWN'].x * keyMap['SPAWN'].mod;
+				player.y = keyMap['SPAWN'].y * keyMap['SPAWN'].mod;
+			});// then
+	}// loadMap
 };
