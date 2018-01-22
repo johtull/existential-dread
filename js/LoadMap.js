@@ -4,8 +4,11 @@ LoadMapJS = {
 		if(typeof path === 'undefined' || path === '') {
 			return;
 		}
+		
 		let tileMap = [];
 		let keyMap = {};
+		let darkList = [];
+		
 		fetch(path)
 			.then(function(resp) {
 				return resp.text();
@@ -22,6 +25,13 @@ LoadMapJS = {
 						}else if(txtMap[h] === 'START') {
 							parseMap = true;
 							mapStartH = h + 1;
+						}else if(txtMap[h].startsWith('DARKNESS')) {
+							let tmp = txtMap[h].split('=');
+							let dark = JSON.parse(tmp[1].toString());
+							darkness.damage = dark.damage;
+						}else if(txtMap[h].startsWith('D_INST')) {
+							let dinst = txtMap[h].split('=');
+							darkList.push(Object.assign({}, JSON.parse(dinst[1].toString())));
 						}else {
 							let key = txtMap[h].split('=');
 							keyMap[key[0].toString()] = JSON.parse(key[1].toString());
@@ -62,6 +72,8 @@ LoadMapJS = {
 			
 				player.x = keyMap['SPAWN'].x * keyMap['SPAWN'].mod;
 				player.y = keyMap['SPAWN'].y * keyMap['SPAWN'].mod;
+				
+				darkness.instructions = darkList;
 				
 				if(isSoundEnabled) {
 					loopMusic(keyMap['MAP'].music);

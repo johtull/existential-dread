@@ -268,7 +268,7 @@ function collision() {
 						if(tile.type === 'jump') {
 							wasd[1] = wasd[3] = false;
 							player.isJumping = true;
-							player.vertSpeed = map.gravitySpeed * -1;
+							player.vertSpeed = map.gravitySpeed * 2 * -1;
 						}else {
 							if(tile.type === 'battery') {
 								player.batteryCharge += player.batteryRefill;

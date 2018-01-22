@@ -7,6 +7,8 @@ var isGameOver = false;
 var isPaused = false;
 var isSoundEnabled = true;
 
+var date = new Date();
+
 var wasd = [false, false, false, false];
 
 function loadImage(path, x, y) {
@@ -90,6 +92,18 @@ var player = {
 	lanternParts: 0,
 	batteryCharge: 0,
 	batteryRefill: 50
+};
+
+var d_inst = {
+	dir: 0, //wasd
+	condType: 'time', //lantern
+	cond: '30', // 3
+	speed: 5
+};
+
+var darkness = {
+	damage: 1,
+	instructions: []
 };
 
 
