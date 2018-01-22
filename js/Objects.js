@@ -111,14 +111,18 @@ function stopSound(sound) {
 	eval(sound).pause();
 	eval(sound).currentTime = 0;
 }
+function loopMusic(path) {
+	if(isSoundEnabled) {
+		music.pause();
+		music.currentTime = 0;
+		music.src = path;
+		music.loop = true;
+		music.play();
+	}
+}
 
 // sfx
 var gong = new Audio('audio/sfx/clank.wav');
 
 // music
-var music_lobby = new Audio('audio/music/existential_dread_0.wav');
-loopSound('music_lobby');
-
-/* var music_level_1 = new Audio('audio/music/hopeless_.mp3');
-var music_level_2 = new Audio('audio/music/existential_dread_0.mp3');
-var music_level_3 = new Audio('audio/music/existential_dread_0.mp3'); */
+var music = new Audio();

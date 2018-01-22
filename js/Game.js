@@ -100,11 +100,6 @@ function initGame() {
 
 	main();
 }
-
-
-
-//hit = new Audio('hit.wav');
-
 function main() {
 	if(isGameOver) {
 		//renderGameOver();
@@ -122,6 +117,7 @@ function main() {
 		requestAnimationFrame(main);
 	}
 }
+
 
 function updatePlayer() {
 	if (player.x - map.x >= (map.screenX / 2) - (player.sizeX * 2) && map.x < map.floorX - map.screenX) {
@@ -269,15 +265,21 @@ function collision() {
 				   (player.x + player.sizeX > tile.x) &&
 				   (player.y < tile.y + tile.sizeY) &&
 				   (player.y + player.sizeY > tile.y)) {
-					   if(tile.type === 'battery') {
-						   player.batteryCharge += player.batteryRefill;
-					   }else if(tile.type === 'lantern') {
-						   player.lanternParts++;
-					   }else if(tile.type === 'door') {
-						   LoadMapJS.load32Map(map.nextMap);
-					   }
-					   map.tiles.splice(i,1);
-					   playSound('gong');
+						if(tile.type === 'jump') {
+							wasd[1] = wasd[3] = false;
+							player.isJumping = true;
+							player.vertSpeed = map.gravitySpeed * -1;
+						}else {
+							if(tile.type === 'battery') {
+								player.batteryCharge += player.batteryRefill;
+							}else if(tile.type === 'lantern') {
+								player.lanternParts++;
+							}else if(tile.type === 'door') {
+								LoadMapJS.load32Map(map.nextMap);
+							}
+							map.tiles.splice(i,1);
+							playSound('gong');
+						}
 				   }
 			}
 		}

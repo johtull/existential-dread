@@ -8,9 +8,9 @@ c={"x":0,"y":0,"sizeX":32,"sizeY":16,"isSolid":true,"type":"","img":1}
 4={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":false,"type":"lantern","img":12}
 5={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":false,"type":"lantern","img":13}
 #={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":false,"type":"door","img":15}
-F={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":false,"type":"","img":16}
-MAP={"width":64,"height":18,"x":1408,"y":0,"floorX":2048,"floorY":576,"img":0,"nextMap":"maps/map2.txt"}
-SPAWN={"x":62,"y":3,"mod":32}
+F={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":false,"type":"jump","img":16}
+MAP={"width":64,"height":18,"x":1408,"y":0,"floorX":2048,"floorY":576,"img":0,"nextMap":"maps/map2.txt","music":"audio/music/hopeless_1.wav"}
+SPAWN={"x":62,"y":4,"mod":32}
 START
 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 Cc                                                             b

@@ -62,6 +62,10 @@ LoadMapJS = {
 			
 				player.x = keyMap['SPAWN'].x * keyMap['SPAWN'].mod;
 				player.y = keyMap['SPAWN'].y * keyMap['SPAWN'].mod;
+				
+				if(isSoundEnabled) {
+					loopMusic(keyMap['MAP'].music);
+				}
 			});// then
 	}// loadMap
 };
