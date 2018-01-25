@@ -8,7 +8,7 @@ function init() {
 				if(map.gravityOn && !player.isJumping) {
 					player.isJumping = true;
 					if(player.isSprinting) {
-						player.vertSpeed = map.gravitySpeed * 2 * -1;
+						player.vertSpeed = player.defaultSprintJumpSpeed;
 					}else {
 						player.vertSpeed = map.gravitySpeed * -1;
 					}
@@ -43,7 +43,9 @@ function init() {
 				if(!isPaused) {
 					main();
 				}else {
-					renderPause();
+					if(!debug) {
+						renderPause();
+					}
 				}
 				break;
 			default:
@@ -272,9 +274,9 @@ function collision() {
 				   (player.y + player.sizeY > tile.y)) {
 						if(tile.type === 'jump') {
 						  if(!player.isJumping && player.y < tile.y + tile.sizeY) {
-								player.y = tile.y;
+								//player.y = tile.y;
 								player.isJumping = true;
-								player.vertSpeed = player.defaultJumpSpeed;
+								player.vertSpeed = player.defaultSprintJumpSpeed;
 							}
 						}else {
 							if(tile.type === 'battery') {
