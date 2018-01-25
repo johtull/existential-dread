@@ -273,8 +273,8 @@ function collision() {
 				   (player.y < tile.y + tile.sizeY) &&
 				   (player.y + player.sizeY > tile.y)) {
 						if(tile.type === 'jump') {
-						  if(!player.isJumping && player.y < tile.y + tile.sizeY) {
-								//player.y = tile.y;
+						  if(!player.isJumping && player.y < (tile.y + tile.sizeY)) {
+								player.y = tile.y;
 								player.isJumping = true;
 								player.vertSpeed = player.defaultSprintJumpSpeed;
 							}
@@ -307,14 +307,25 @@ function draw() {
 	
 	p_ctx.drawImage(bg_imgs[map.img], (map.x * -1), (map.y * -1), map.floorX, map.floorY);
 	
+	if(debug) {
+		p_ctx.strokeStyle = "#FF0000";
+	}
+	
 	for(var i = 0; i < map.tiles.length; i++) {
 		let tile = map.tiles[i];
 		if(tile.x - map.x < map.screenX && tile.y - map.y < map.screenY) {
 			p_ctx.drawImage(tile_imgs[tile.img], tile.x - map.x, tile.y - map.y, tile.sizeX, tile.sizeY);
+			if(debug) {
+				p_ctx.strokeRect(tile.x - map.x, tile.y - map.y, tile.sizeX, tile.sizeY);
+			}
 		}
 	}
 	
 	p_ctx.drawImage(player_imgs[player.img], player.x - map.x, player.y - map.y, player.sizeX, player.sizeY);
+	
+	if(debug) {
+		p_ctx.strokeRect(player.x - map.x, player.y - map.y, player.sizeX, player.sizeY);
+	}
 	
 	//	show bench center
 	//ctx.beginPath();
