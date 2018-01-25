@@ -87,6 +87,7 @@ var player = {
 	speed: 0,
 	defaultSpeed: 5,
 	defaultSprintSpeed: 10,
+	defaultJumpSpeed: -20,
 	isSprinting: false,
 	isJumping: false,
 	vertSpeed: 0,

@@ -138,7 +138,7 @@ function updatePlayer() {
 			map.y += player.speed;
 		}
 	}
-	if ((player.y - map.y <= (map.screenY / 2) && map.y > 0)){// || (map.y > map.floorY - map.screenY)) {
+	if ((player.y - map.y + player.sizeY <= (map.screenY / 2) && map.y > 0)){// || (map.y > map.floorY - map.screenY)) {
 		if(player.vertSpeed < 0 && Math.abs(player.vertSpeed) > player.speed) {
 			map.y += player.vertSpeed;
 		} else {
@@ -271,9 +271,11 @@ function collision() {
 				   (player.y < tile.y + tile.sizeY) &&
 				   (player.y + player.sizeY > tile.y)) {
 						if(tile.type === 'jump') {
-							wasd[1] = wasd[3] = false;
-							player.isJumping = true;
-							player.vertSpeed = map.gravitySpeed * 2 * -1;
+						  if(!player.isJumping && player.y < tile.y + tile.sizeY) {
+								player.y = tile.y;
+								player.isJumping = true;
+								player.vertSpeed = player.defaultJumpSpeed;
+							}
 						}else {
 							if(tile.type === 'battery') {
 								player.batteryCharge += player.batteryRefill;
