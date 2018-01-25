@@ -246,7 +246,7 @@ function collision() {
 				if(player.x + player.sizeX - map.collisionThresholdX > tile.x) {
 					player.x = tile.x + tile.sizeX;
 				}else if(player.x < tile.x + tile.sizeX - map.collisionThresholdX) {
-					player.x = tile.x - player.sizeX * map.clippingX;
+					player.x = tile.x - player.sizeX; //map.clippingX
 				}
 			}
 			// xy movement collision
