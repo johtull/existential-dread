@@ -1,4 +1,4 @@
-var debug = true;
+var debug = false;
 
 var canvas = {};
 var ctx = {};
@@ -74,6 +74,7 @@ var map = {
 	gravityOn: true,
 	gravitySpeed: 15,
 	img: 0,
+	alpha: 1,
 	nextMap: 'maps/map1.txt',
 	tiles: []
 };

@@ -44,7 +44,8 @@ function init() {
 					main();
 				}else {
 					if(!debug) {
-						renderPause();
+						renderBlackFade();
+						//renderPause();
 					}
 				}
 				break;
@@ -350,6 +351,22 @@ function renderPause() {
 	ctx.fillText('PAUSED', canvas.width/2, canvas.height/2);
 	ctx.font = '16px Verdana';
 	ctx.fillText('PRESS P TO RESUME', canvas.width/2, canvas.height/2 + 32);
+}
+function renderBlackFade() {
+	console.log(map.alpha);
+	map.alpha -= 0.05;
+    if (map.alpha <= 0) {
+		map.alpha = 0;
+		return;
+	}
+	
+	
+    ctx.globalAlpha = map.alpha;
+	ctx.fillStyle = "black";
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+    draw();
+
+    requestAnimationFrame(renderBlackFade);
 }
 
 function renderBlack() {
