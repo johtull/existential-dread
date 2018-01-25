@@ -75,6 +75,7 @@ var map = {
 	gravitySpeed: 15,
 	img: 0,
 	alpha: 1,
+	fadeImg: '',
 	nextMap: 'maps/map1.txt',
 	tiles: []
 };

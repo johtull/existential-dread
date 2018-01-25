@@ -77,15 +77,18 @@ LoadMapJS = {
 				
 				darkness.instructions = darkList;
 				
-				let w_start = Date.now(),
+				/* let w_start = Date.now(),
 					w_now = w_start;
 				while (w_now - w_start < 1000) {
 					w_now = Date.now();
-				}
+				} */
 				
 				if(isSoundEnabled) {
 					loopMusic(keyMap['MAP'].music);
 				}
+				
+				ctx.globalAlpha = 1;
+				map.alpha = 1;
 				
 				main();
 			});// then

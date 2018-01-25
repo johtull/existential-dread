@@ -23,7 +23,7 @@ C                                   1                          b
 C                           CCCCCCCCCCCCCCC                    b
 C                           C             C                   sb
 C                           C             C               <CCCCb
-C                           C 2          CCCCC<   <FF<  <Cc    b
+C                           C 2          CCCCC<         <Cc    b
 C                  CCCCCCCCCCCCC          C  cCCCCCCCCCCc      b
 C                                      CCCc                    b
 CCCCC       CCCC                                               b

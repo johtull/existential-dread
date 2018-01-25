@@ -44,8 +44,7 @@ function init() {
 					main();
 				}else {
 					if(!debug) {
-						renderBlackFade();
-						//renderPause();
+						renderPause();
 					}
 				}
 				break;
@@ -109,9 +108,16 @@ function main() {
 		alert("The game is over.");
 	}else if(isLoadNextMap) {
 		stopMusic()
-		renderBlack();
+		
+		let data = canvas.toDataURL();
+		let img = document.createElement('img');
+		img.src = data;
+		map.fadeImg = img;
+		
+		renderLevelFade(); 
+		
 		isLoadNextMap = false;
-		LoadMapJS.load32Map(map.nextMap);
+		
 	}else if(!isPaused) {
 		updatePlayer();
 		collision();
@@ -300,6 +306,10 @@ function collision() {
 }
 
 function draw() {
+	if(ctx.globalAlpha < 1) {
+		return;
+	}
+	
 	// pre-rendering
 	var p_cvs = document.createElement('canvas');
 	p_cvs.width = canvas.width;
@@ -338,9 +348,8 @@ function draw() {
 	//p_ctx.textAlign = 'left';
 	//p_ctx.strokeText(player.health + '/' + player.maxHealth, 20, 40);
 	//p_ctx.strokeText('Score: ' + player.points, 20, 80);
-	
 	ctx.drawImage(p_cvs, 0, 0, canvas.width, canvas.height);
-}
+}//draw
 
 function renderPause() {
 	ctx.fillStyle = '#000000';
@@ -352,24 +361,36 @@ function renderPause() {
 	ctx.font = '16px Verdana';
 	ctx.fillText('PRESS P TO RESUME', canvas.width/2, canvas.height/2 + 32);
 }
-function renderBlackFade() {
-	console.log(map.alpha);
-	map.alpha -= 0.05;
-    if (map.alpha <= 0) {
-		map.alpha = 0;
-		return;
-	}
-	
-	
-    ctx.globalAlpha = map.alpha;
-	ctx.fillStyle = "black";
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
-    draw();
-
-    requestAnimationFrame(renderBlackFade);
-}
 
 function renderBlack() {
 	ctx.fillStyle = '#000000';
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function renderLevelFade() {
+        
+	/// increase alpha with delta value
+	map.alpha -= 0.01;
+	
+	//// if delta <=0 or >=1 then reverse
+	if (map.alpha <= 0) {
+		map.alpha = 0;
+	}
+	
+	/// clear canvas
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	
+	/// set global alpha
+	ctx.globalAlpha = map.alpha;
+	
+	/// re-draw image
+	ctx.drawImage(map.fadeImg, 0, 0);
+	
+	if (map.alpha <= 0) {
+		LoadMapJS.load32Map(map.nextMap);
+		return;
+	}
+	
+	/// loop using rAF
+	requestAnimationFrame(renderLevelFade);
 }
