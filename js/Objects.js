@@ -45,7 +45,7 @@ tile_imgs.push(loadImage('img/tiles/lantern_5.png', 32, 32));
 tile_imgs.push(loadImage('img/tiles/battery.png', 32, 32));
 
 tile_imgs.push(loadImage('img/tiles/original_door.png', 32, 32));
-tile_imgs.push(loadImage('img/tiles/TRAMPOLINE.png', 32, 32));
+tile_imgs.push(loadImage('img/tiles/TRAMPOLINE_HALF.png', 32, 32));
 
 tile_imgs.push(loadImage('img/tiles/oomlie.png', 32, 32));
 tile_imgs.push(loadImage('img/tiles/ThomasMural.png', 32, 32));

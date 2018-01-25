@@ -271,10 +271,10 @@ function collision() {
 				if((player.x < tile.x + tile.sizeX) &&
 				   (player.x + player.sizeX > tile.x) &&
 				   (player.y < tile.y + tile.sizeY) &&
-				   (player.y + player.sizeY > tile.y)) {
+				   (player.y + player.sizeY - 1 > tile.y)) {
 						if(tile.type === 'jump') {
-						  if(!player.isJumping && player.y < (tile.y + tile.sizeY)) {
-								player.y = tile.y;
+						  if(!player.isJumping) {
+								player.y = tile.y - tile.sizeY;
 								player.isJumping = true;
 								player.vertSpeed = player.defaultSprintJumpSpeed;
 							}
