@@ -96,14 +96,19 @@ function initGame() {
 	canvas.background = new Image();
 	canvas.background.src = bg_imgs[map.img];
 	
-	LoadMapJS.load32Map('maps/map1.txt');
-
+	isLoadNextMap = true;
+	
 	main();
 }
 function main() {
 	if(isGameOver) {
 		//renderGameOver();
 		alert("The game is over.");
+	}else if(isLoadNextMap) {
+		stopMusic()
+		renderBlack();
+		isLoadNextMap = false;
+		LoadMapJS.load32Map(map.nextMap);
 	}else if(!isPaused) {
 		updatePlayer();
 		collision();
@@ -275,10 +280,13 @@ function collision() {
 							}else if(tile.type === 'lantern') {
 								player.lanternParts++;
 							}else if(tile.type === 'door') {
-								LoadMapJS.load32Map(map.nextMap);
+								isLoadNextMap = true;
+								return;
+							}
+							if(isSoundEnabled) {
+								playSound('gong');
 							}
 							map.tiles.splice(i,1);
-							playSound('gong');
 						}
 				   }
 			}
@@ -327,4 +335,9 @@ function renderPause() {
 	ctx.fillText('PAUSED', canvas.width/2, canvas.height/2);
 	ctx.font = '16px Verdana';
 	ctx.fillText('PRESS P TO RESUME', canvas.width/2, canvas.height/2 + 32);
+}
+
+function renderBlack() {
+	ctx.fillStyle = '#000000';
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
 }

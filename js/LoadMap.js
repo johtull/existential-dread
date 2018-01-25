@@ -70,14 +70,24 @@ LoadMapJS = {
 				map.nextMap = keyMap['MAP'].nextMap;
 				map.tiles = tileMap;
 			
+				wasd = [false, false, false, false];
+				player.vertSpeed = 0;
 				player.x = keyMap['SPAWN'].x * keyMap['SPAWN'].mod;
 				player.y = keyMap['SPAWN'].y * keyMap['SPAWN'].mod;
 				
 				darkness.instructions = darkList;
 				
+				let w_start = Date.now(),
+					w_now = w_start;
+				while (w_now - w_start < 1000) {
+					w_now = Date.now();
+				}
+				
 				if(isSoundEnabled) {
 					loopMusic(keyMap['MAP'].music);
 				}
+				
+				main();
 			});// then
 	}// loadMap
 };

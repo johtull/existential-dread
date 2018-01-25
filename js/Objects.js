@@ -6,6 +6,7 @@ var ctx = {};
 var isGameOver = false;
 var isPaused = false;
 var isSoundEnabled = true;
+var isLoadNextMap = false;
 
 var date = new Date();
 
@@ -73,7 +74,7 @@ var map = {
 	gravityOn: true,
 	gravitySpeed: 15,
 	img: 0,
-	nextMap: '',
+	nextMap: 'maps/map1.txt',
 	tiles: []
 };
 
@@ -126,13 +127,15 @@ function stopSound(sound) {
 	eval(sound).currentTime = 0;
 }
 function loopMusic(path) {
-	if(isSoundEnabled) {
-		music.pause();
-		music.currentTime = 0;
-		music.src = path;
-		music.loop = true;
-		music.play();
-	}
+	music.pause();
+	music.currentTime = 0;
+	music.src = path;
+	music.loop = true;
+	music.play();
+}
+function stopMusic() {
+	music.pause();
+	music.currentTime = 0;
 }
 
 // sfx
