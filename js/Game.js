@@ -10,6 +10,7 @@ function init() {
 					player.lastX = player.x;
 					player.lastY = player.y;
 					if(player.isSprinting) {
+						player.stamina -= 100;
 						player.vertSpeed = player.defaultSprintJumpSpeed;
 					}else {
 						player.vertSpeed = map.gravitySpeed * -1;
@@ -18,15 +19,20 @@ function init() {
 				break;
 			case 65:
 				wasd[1] = true;
+				player.isLeft = true;
 				break;
 			case 83:
 				wasd[2] = true;
 				break;
 			case 68:
 				wasd[3] = true;
+				player.isLeft = false;
 				break;
 			case 16:
 				player.isSprinting = true;
+				break;
+			case 70: // F
+				player.lanternOut = !player.lanternOut;
 				break;
 			case 77:
 				//soundEnabled = !soundEnabled;
@@ -51,7 +57,9 @@ function init() {
 				}
 				break;
 			default:
-				console.log(e.keyCode);
+				if(debug) {
+					console.log(e.keyCode);
+				}
 				break;
 		}
 	}, false);
@@ -121,9 +129,28 @@ function main() {
 		isLoadNextMap = false;
 		
 	}else if(!isPaused) {
+		
 		updatePlayer();
 		collision();
 		draw();
+		
+		let tock = (new Date()).getTime();
+		if(tock - tick > map.tickMS) {
+			tick = tock;
+			player.imgTick++;
+			if(player.imgTick > player.imgTickMax) {
+				player.imgTick = 0;
+				
+				if(player.lanternOut) {
+					player.batteryCharge -= 10;
+				}
+				if(player.isSprinting) {
+					player.stamina -= 100;
+				}else if(player.stamina < player.statMax) {
+					player.stamina += 25;
+				}
+			}
+		}
 		
 		if(debug) {
 			document.getElementById('player').textContent = JSON.stringify(player);
@@ -212,6 +239,63 @@ function updatePlayer() {
 			player.isJumping = false;
 		}
 		player.y = player.y + player.vertSpeed;
+	}
+	
+	// animATION
+	if(wasd[0] || player.isJumping) {
+		if(player.isLeft) {
+			player.img = 8;
+		}else {
+			player.img = 9;
+		}
+	}else if(wasd[1]) {
+		if(player.lanternOut) {
+			player.img = 12;
+		}else {
+			player.img = 2;
+		}
+	}else if(wasd[2]) {
+		if(player.isLeft) {
+			player.img = 4;
+		}else {
+			player.img = 5;
+		}
+	}else if(wasd[3]) {
+		if(player.lanternOut) {
+			player.img = 13;
+		}else {
+			player.img = 3;
+		}
+	}
+	
+	if((!player.isJumping && !wasd[0] && !wasd[1] && !wasd[2] && !wasd[3]) || (wasd[1] && wasd[3])) {
+		if(player.lanternOut) {
+			if(player.isLeft) {
+				player.img = 10;
+			}else {
+				player.img = 11;
+			}
+		}else {
+			if(player.isLeft) {
+				player.img = 0;
+			}else {
+				player.img = 1;
+			}
+		}
+	}
+	
+	
+	// STATS
+	if(player.stamina < 0) {
+		player.stamina = 0;
+	}else if(player.stamina > player.statMax) {
+		player.stamina = player.statMax;
+	}
+	if(player.batteryCharge < 0) {
+		player.batteryCharge = 0;
+		player.lanternOut = false;
+	}else if(player.batteryCharge > player.statMax) {
+		player.batteryCharge = player.statMax;
 	}
 }
 
@@ -328,12 +412,14 @@ function draw() {
 	p_cvs.height = canvas.height;
 	var p_ctx = p_cvs.getContext('2d');
 	
+	// draw map
 	p_ctx.drawImage(bg_imgs[map.img], (map.x * -1), (map.y * -1), map.floorX, map.floorY);
 	
 	if(debug) {
 		p_ctx.strokeStyle = "#FF0000";
 	}
 	
+	// draw tiles
 	for(var i = 0; i < map.tiles.length; i++) {
 		let tile = map.tiles[i];
 		if(tile.x - map.x < map.screenX && tile.y - map.y < map.screenY) {
@@ -344,23 +430,30 @@ function draw() {
 			}
 		}
 	}
-	
-	p_ctx.drawImage(player_imgs[player.img], player.x - map.x, player.y - map.y, player.sizeX, player.sizeY);
+	// draw player
+	p_ctx.drawImage(player_imgs[player.img], player.imgTick * player.sizeX, 0, player.sizeX, player.sizeY, player.x - map.x, player.y - map.y, player.sizeX, player.sizeY);
 	
 	if(debug) {
 		p_ctx.strokeRect(player.x - map.x, player.y - map.y, player.sizeX, player.sizeY);
 	}
 	
-	//	show bench center
-	//ctx.beginPath();
-	//ctx.arc(player.x, player.y, 1, 1, Math.PI*2);
-	//ctx.fillStyle = "#FF0000";
-	//ctx.fill();
-	//ctx.closePath();
-	//p_ctx.font = "24px Verdana";
-	//p_ctx.textAlign = 'left';
-	//p_ctx.strokeText(player.health + '/' + player.maxHealth, 20, 40);
-	//p_ctx.strokeText('Score: ' + player.points, 20, 80);
+	// render UI
+	p_ctx.fillStyle = "#AA0000";
+	p_ctx.fillRect(507,10,100,10);
+	p_ctx.fillStyle = "#FF0000";
+	p_ctx.fillRect(510,7,player.health/10,10);
+	p_ctx.fillStyle = "#00AA00";
+	p_ctx.fillRect(507,25,100,10);
+	p_ctx.fillStyle = "#00FF00";
+	p_ctx.fillRect(510,22,player.stamina/10,10);
+	if(player.lanternParts === 5) {
+		p_ctx.fillStyle = "#AAAA00";
+		p_ctx.fillRect(507,40,100,10);
+		p_ctx.fillStyle = "#FFFF00";
+		p_ctx.fillRect(510,37,player.batteryCharge/10,10);
+	}
+	
+	// render pre-rendered canvas
 	ctx.drawImage(p_cvs, 0, 0, canvas.width, canvas.height);
 }//draw
 

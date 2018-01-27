@@ -1,28 +1,24 @@
 * {
 	margin: 0;
 	padding: 0;
+	font-family: "Courier New", Courier, monospace;
 }
 html {
 	background-color: #000;
+	color: white;
 }
 body {
 	text-align: center;
 }
-.score {
-	font-family: verdana;
-	font-size: 2em;
-	position: relative;
-	color: #fff;
-}
 canvas {
 	display: block;
-	position: absolute;
+	/*position: absolute;*/
 	margin: auto;
 	top: 0;
 	bottom: 0;
 	right: 0;
 	left: 0;
 }
-#player {
-	color: white;
+button {
+	padding: 4px;
 }

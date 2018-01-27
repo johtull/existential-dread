@@ -8,7 +8,7 @@ var isPaused = false;
 var isSoundEnabled = true;
 var isLoadNextMap = false;
 
-var date = new Date();
+var tick = new Date();
 
 var wasd = [false, false, false, false];
 
@@ -24,7 +24,22 @@ bg_imgs.push(loadImage('img/bgs/level_2.png', 2048, 2048));
 bg_imgs.push(loadImage('img/bgs/level_3.png', 2048, 576));
 
 var player_imgs = [];
-player_imgs.push(loadImage('img/player/player.png', 32, 32));
+player_imgs.push(loadImage('img/player/idleLEFT.png', 32, 32));
+player_imgs.push(loadImage('img/player/idleRIGHT.png', 32, 32));
+player_imgs.push(loadImage('img/player/runLEFT.png', 32, 32));
+player_imgs.push(loadImage('img/player/runRIGHT.png', 32, 32));
+player_imgs.push(loadImage('img/player/crouchLEFT.png', 32, 32));
+player_imgs.push(loadImage('img/player/crouchRIGHT.png', 32, 32));
+player_imgs.push(loadImage('img/player/exhaustedLEFT.png', 32, 32));
+player_imgs.push(loadImage('img/player/exhaustedRIGHT.png', 32, 32));
+player_imgs.push(loadImage('img/player/jumpLEFT.png', 32, 32));
+player_imgs.push(loadImage('img/player/jumpRIGHT.png', 32, 32));
+
+player_imgs.push(loadImage('img/player/idlelanternLEFT.png', 32, 32));
+player_imgs.push(loadImage('img/player/idlelanternRIGHT.png', 32, 32));
+player_imgs.push(loadImage('img/player/runlanternLEFT.png', 32, 32));
+player_imgs.push(loadImage('img/player/runlanternRIGHT.png', 32, 32));
+
 
 var tile_imgs = [];
 tile_imgs.push(loadImage('img/tiles/cityblock.png', 32, 32));
@@ -74,6 +89,7 @@ var map = {
 	gravityOn: true,
 	gravitySpeed: 15,
 	img: 0,
+	tickMS: 100,
 	alpha: 0,
 	fadeImg: '',
 	nextMap: 'maps/map1.txt',
@@ -81,7 +97,10 @@ var map = {
 };
 
 var player = {
-	img: 0,
+	img: 2,
+	imgTick: 0,//0-3
+	imgTickMax: 3,
+	isLeft: true,
 	x: 64,
 	y: 64,
 	sizeX: 32,
@@ -95,9 +114,13 @@ var player = {
 	lastX: 0,
 	lastY: 0,
 	vertSpeed: 0,
+	statMax: 1000,
+	health: 1000,
+	stamina: 1000,
 	lanternParts: 0,
-	batteryCharge: 0,
-	batteryRefill: 50
+	batteryCharge: 250,
+	batteryRefill: 100,
+	lanternOut: false
 };
 
 var d_inst = {
