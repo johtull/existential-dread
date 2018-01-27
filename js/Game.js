@@ -7,6 +7,8 @@ function init() {
 				wasd[0] = true;
 				if(map.gravityOn && !player.isJumping) {
 					player.isJumping = true;
+					player.lastX = player.x;
+					player.lastY = player.y;
 					if(player.isSprinting) {
 						player.vertSpeed = player.defaultSprintJumpSpeed;
 					}else {
@@ -214,7 +216,7 @@ function updatePlayer() {
 }
 
 function collision() {
-	
+	let shoves = 0;
 	for(var i = 0; i < map.tiles.length; i++) {
 		let tile = map.tiles[i];
 		if(tile.isSolid) {
@@ -238,6 +240,10 @@ function collision() {
 			   (player.y < tile.y + tile.sizeY)) {
 				   // PROBLEM ???
 					if(player.vertSpeed < 0) {
+						if(debug) {
+							ctx.strokeStyle = "#00FF00";
+							ctx.strokeRect(tile.x - map.x, tile.y - map.y, tile.sizeX, tile.sizeY);
+						}
 					    player.vertSpeed = 0;
 					    player.y = tile.y + tile.sizeY;
 					}else if(!map.gravityOn) {
@@ -254,8 +260,10 @@ function collision() {
 			(player.y < tile.y + tile.sizeY)) {
 				if(player.x + player.sizeX - map.collisionThresholdX > tile.x) {
 					player.x = tile.x + tile.sizeX;
+					shoves++;
 				}else if(player.x < tile.x + tile.sizeX - map.collisionThresholdX) {
 					player.x = tile.x - player.sizeX; //map.clippingX
+					shoves++;
 				}
 			}
 			// xy movement collision
@@ -303,6 +311,10 @@ function collision() {
 			}
 		}
 	}
+	if(shoves > 1) {
+		player.x = player.lastX;
+		player.y = player.lastY;
+	}
 }
 
 function draw() {
@@ -328,6 +340,7 @@ function draw() {
 			p_ctx.drawImage(tile_imgs[tile.img], tile.x - map.x, tile.y - map.y, tile.sizeX, tile.sizeY);
 			if(debug) {
 				p_ctx.strokeRect(tile.x - map.x, tile.y - map.y, tile.sizeX, tile.sizeY);
+				p_ctx.strokeText('['+i+']', tile.x - map.x, tile.y - map.y + tile.sizeY/2);
 			}
 		}
 	}

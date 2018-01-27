@@ -74,7 +74,7 @@ var map = {
 	gravityOn: true,
 	gravitySpeed: 15,
 	img: 0,
-	alpha: 1,
+	alpha: 0,
 	fadeImg: '',
 	nextMap: 'maps/map1.txt',
 	tiles: []
@@ -92,6 +92,8 @@ var player = {
 	defaultSprintJumpSpeed: -20,
 	isSprinting: false,
 	isJumping: false,
+	lastX: 0,
+	lastY: 0,
 	vertSpeed: 0,
 	lanternParts: 0,
 	batteryCharge: 0,
