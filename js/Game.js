@@ -132,11 +132,13 @@ function main() {
 		
 		updatePlayer();
 		collision();
+		updateDarkness()
 		draw();
 		
 		let tock = (new Date()).getTime();
 		if(tock - tick > map.tickMS) {
 			tick = tock;
+			map.passedMS += map.tickMS;
 			player.imgTick++;
 			if(player.imgTick > player.imgTickMax) {
 				player.imgTick = 0;
@@ -242,7 +244,7 @@ function updatePlayer() {
 	}
 	
 	// animATION
-	if(wasd[0] || player.isJumping) {
+	if(wasd[0] && player.isJumping) {
 		if(player.isLeft) {
 			player.img = 8;
 		}else {
@@ -268,7 +270,7 @@ function updatePlayer() {
 		}
 	}
 	
-	if((!player.isJumping && !wasd[0] && !wasd[1] && !wasd[2] && !wasd[3]) || (wasd[1] && wasd[3])) {
+	if((!player.isJumping && !wasd[1] && !wasd[2] && !wasd[3]) || (wasd[1] && wasd[3])) {
 		if(player.lanternOut) {
 			if(player.isLeft) {
 				player.img = 10;
@@ -401,6 +403,48 @@ function collision() {
 	}
 }
 
+function updateDarkness() {
+	if(darknesses.instructions.length === 0) {
+		return;
+	}
+	let peek = darknesses.instructions[darknesses.instructions.length - 1];
+	if(peek.condType === 'time') {
+		if(map.passedMS > Number(peek.cond)) {
+			let darkIndex = darknesses.darkness.findIndex(function(e) {
+				return peek.id === e.id;
+			});
+			if(darkIndex < 0) {
+				darknesses.darkness.push(Object.assign({}, peek));
+			}else {
+				let keys = Object.keys(peek);
+				keys.forEach(function(k) {
+					darknesses.darkness[darkIndex][k] = peek[k];
+				});
+			}
+			darknesses.instructions.pop();
+		}
+	}
+	
+	for(let i = 0; i < darknesses.darkness.length; i++) {
+		switch(darknesses.darkness[i].dir) {
+			case 0: //up
+				darknesses.darkness[i]['y'] -= darknesses.darkness[i]['speed'];
+				break;
+			case 1: //left
+				darknesses.darkness[i]['x'] -= darknesses.darkness[i]['speed'];
+				break;
+			case 2: //down
+				darknesses.darkness[i]['y'] += darknesses.darkness[i]['speed'];
+				break;
+			case 3: //right
+				darknesses.darkness[i]['x'] += darknesses.darkness[i]['speed'];
+				break;
+			default:
+				break;
+		}
+	}
+}
+
 function draw() {
 	if(ctx.globalAlpha < 1) {
 		return;
@@ -432,6 +476,15 @@ function draw() {
 	}
 	// draw player
 	p_ctx.drawImage(player_imgs[player.img], player.imgTick * player.sizeX, 0, player.sizeX, player.sizeY, player.x - map.x, player.y - map.y, player.sizeX, player.sizeY);
+	
+	// darkness
+	//p_ctx.globalAlpha = 1;
+	p_ctx.strokeStyle = "#000000";
+	for(let i = 0; i < darknesses.darkness.length; i++) {
+		p_ctx.fillRect(darknesses.darkness[i]['x'] - map.x,
+						 darknesses.darkness[i]['y'] - map.y,
+						 canvas.width, canvas.height);
+	}
 	
 	if(debug) {
 		p_ctx.strokeRect(player.x - map.x, player.y - map.y, player.sizeX, player.sizeY);

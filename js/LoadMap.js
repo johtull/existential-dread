@@ -26,10 +26,6 @@ LoadMapJS = {
 							parseMap = true;
 							mapStartH = h + 1;
 						}else if(txtMap[h].startsWith('DARKNESS')) {
-							let tmp = txtMap[h].split('=');
-							let dark = JSON.parse(tmp[1].toString());
-							darkness.damage = dark.damage;
-						}else if(txtMap[h].startsWith('D_INST')) {
 							let dinst = txtMap[h].split('=');
 							darkList.push(Object.assign({}, JSON.parse(dinst[1].toString())));
 						}else {
@@ -75,13 +71,7 @@ LoadMapJS = {
 				player.x = keyMap['SPAWN'].x * keyMap['SPAWN'].mod;
 				player.y = keyMap['SPAWN'].y * keyMap['SPAWN'].mod;
 				
-				darkness.instructions = darkList;
-				
-				/* let w_start = Date.now(),
-					w_now = w_start;
-				while (w_now - w_start < 1000) {
-					w_now = Date.now();
-				} */
+				darknesses.instructions = darkList.reverse();
 				
 				if(isSoundEnabled) {
 					loopMusic(keyMap['MAP'].music);

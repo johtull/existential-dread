@@ -90,6 +90,7 @@ var map = {
 	gravitySpeed: 15,
 	img: 0,
 	tickMS: 100,
+	passedMS: 0,
 	alpha: 0,
 	fadeImg: '',
 	nextMap: 'maps/map1.txt',
@@ -123,16 +124,20 @@ var player = {
 	lanternOut: false
 };
 
-var d_inst = {
+var darkness = {
+	id: 0,
+	x: 0,
+	y: 0,
 	dir: 0, //wasd
 	condType: 'time', //lantern
 	cond: '30', // 3
-	speed: 5
-};
+	speed: 1,
+	damage: 1
+}
 
-var darkness = {
-	damage: 1,
-	instructions: []
+var darknesses = {
+	instructions: [], // list of darkness objects loaded with the map
+	darkness: [] // active darkness objects
 };
 
 
