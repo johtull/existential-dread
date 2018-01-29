@@ -34,10 +34,10 @@ The moving black clouds/walls are the Darkness. For every moment in the Darkness
 lantern is off, you will take damage. When your health is depleted, the game is over.  
   
 ## LEVEL 1 - CITY:  
-You must fix your lantern by collecting its 5 broken parts.  
+	You must fix your lantern by collecting its 5 broken parts.  
   
 ## LEVEL 2 - SUBWAY/SEWER:  
-You must traverse a maze. Collecting extra batteries may help.  
+	You must traverse a maze. Collecting extra batteries may help.  
   
 ## LEVEL 3 - BOSS FIGHT:  
-You must survive the darkness until morning comes.  
+	You must survive the darkness until morning comes.  
