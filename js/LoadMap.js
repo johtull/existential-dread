@@ -65,12 +65,16 @@ LoadMapJS = {
 				map.img = keyMap['MAP'].img;
 				map.nextMap = keyMap['MAP'].nextMap;
 				map.tiles = tileMap;
+				map.passedMS = 0;
 			
 				wasd = [false, false, false, false];
 				player.vertSpeed = 0;
 				player.x = keyMap['SPAWN'].x * keyMap['SPAWN'].mod;
 				player.y = keyMap['SPAWN'].y * keyMap['SPAWN'].mod;
+				player.inDarkness = false;
 				
+				darknesses.instructions = [];
+				darknesses.darkness = [];
 				darknesses.instructions = darkList.reverse();
 				
 				if(isSoundEnabled) {

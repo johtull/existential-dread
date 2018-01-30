@@ -32,7 +32,9 @@ function init() {
 				player.isSprinting = true;
 				break;
 			case 70: // F
-				player.lanternOut = !player.lanternOut;
+				if(player.batteryCharge > 0) {
+					player.lanternOn = !player.lanternOn;
+				}
 				break;
 			case 77:
 				//soundEnabled = !soundEnabled;
@@ -143,7 +145,7 @@ function main() {
 			if(player.imgTick > player.imgTickMax) {
 				player.imgTick = 0;
 				
-				if(player.lanternOut) {
+				if(player.lanternOn) {
 					player.batteryCharge -= 10;
 				}
 				if(player.isSprinting) {
@@ -251,7 +253,7 @@ function updatePlayer() {
 			player.img = 9;
 		}
 	}else if(wasd[1]) {
-		if(player.lanternOut) {
+		if(player.lanternOn) {
 			player.img = 12;
 		}else {
 			player.img = 2;
@@ -263,7 +265,7 @@ function updatePlayer() {
 			player.img = 5;
 		}
 	}else if(wasd[3]) {
-		if(player.lanternOut) {
+		if(player.lanternOn) {
 			player.img = 13;
 		}else {
 			player.img = 3;
@@ -271,7 +273,7 @@ function updatePlayer() {
 	}
 	
 	if((!player.isJumping && !wasd[1] && !wasd[2] && !wasd[3]) || (wasd[1] && wasd[3])) {
-		if(player.lanternOut) {
+		if(player.lanternOn) {
 			if(player.isLeft) {
 				player.img = 10;
 			}else {
@@ -295,7 +297,7 @@ function updatePlayer() {
 	}
 	if(player.batteryCharge < 0) {
 		player.batteryCharge = 0;
-		player.lanternOut = false;
+		player.lanternOn = false;
 	}else if(player.batteryCharge > player.statMax) {
 		player.batteryCharge = player.statMax;
 	}
@@ -401,15 +403,23 @@ function collision() {
 		player.x = player.lastX;
 		player.y = player.lastY;
 	}
+	
+	// check if player is in the darkness
+	player.inDarkness = false;
+	darknesses.darkness.forEach(function(e) {
+		if((player.y + player.sizeY > e.y1 && e.dir === 0) ||
+		   (player.x + player.sizeX > e.x1 && e.dir === 1) ||
+		   (player.y < e.y2 && e.dir === 2) ||
+		   (player.x < e.x2 && e.dir === 3)) {
+			   player.inDarkness = true;
+		   }
+	});
 }
 
 function updateDarkness() {
-	if(darknesses.instructions.length === 0) {
-		return;
-	}
-	let peek = darknesses.instructions[darknesses.instructions.length - 1];
-	if(peek.condType === 'time') {
-		if(map.passedMS > Number(peek.cond)) {
+	if(darknesses.instructions.length > 0) {
+		let peek = darknesses.instructions[darknesses.instructions.length - 1];
+		if((peek.condType === 'time' && map.passedMS > Number(peek.cond)) ||   (peek.condType === 'lantern' && player.lanternParts >= Number(peek.cond))) {
 			let darkIndex = darknesses.darkness.findIndex(function(e) {
 				return peek.id === e.id;
 			});
@@ -424,20 +434,30 @@ function updateDarkness() {
 			darknesses.instructions.pop();
 		}
 	}
-	
 	for(let i = 0; i < darknesses.darkness.length; i++) {
+		if(darknesses.darkness[i].speed === 0) {
+			continue;
+		}
 		switch(darknesses.darkness[i].dir) {
 			case 0: //up
-				darknesses.darkness[i]['y'] -= darknesses.darkness[i]['speed'];
+				if(darknesses.darkness[i]['y1'] > 0) {
+					darknesses.darkness[i]['y1'] -= darknesses.darkness[i]['speed'];
+				}
 				break;
 			case 1: //left
-				darknesses.darkness[i]['x'] -= darknesses.darkness[i]['speed'];
+				if(darknesses.darkness[i]['x1'] > 0) {
+					darknesses.darkness[i]['x1'] -= darknesses.darkness[i]['speed'];
+				}
 				break;
 			case 2: //down
-				darknesses.darkness[i]['y'] += darknesses.darkness[i]['speed'];
+				if(darknesses.darkness[i]['y2'] <= map.floorY) {
+					darknesses.darkness[i]['y2'] += darknesses.darkness[i]['speed'];
+				}
 				break;
 			case 3: //right
-				darknesses.darkness[i]['x'] += darknesses.darkness[i]['speed'];
+				if(darknesses.darkness[i]['x2'] <= map.floorX) {
+					darknesses.darkness[i]['x2'] += darknesses.darkness[i]['speed'];
+				}
 				break;
 			default:
 				break;
@@ -474,17 +494,40 @@ function draw() {
 			}
 		}
 	}
-	// draw player
-	p_ctx.drawImage(player_imgs[player.img], player.imgTick * player.sizeX, 0, player.sizeX, player.sizeY, player.x - map.x, player.y - map.y, player.sizeX, player.sizeY);
 	
 	// darkness
-	//p_ctx.globalAlpha = 1;
 	p_ctx.strokeStyle = "#000000";
+	p_ctx.globalAlpha = 0.95;
 	for(let i = 0; i < darknesses.darkness.length; i++) {
-		p_ctx.fillRect(darknesses.darkness[i]['x'] - map.x,
-						 darknesses.darkness[i]['y'] - map.y,
-						 canvas.width, canvas.height);
+		p_ctx.fillRect(darknesses.darkness[i]['x1'] - map.x,
+					   darknesses.darkness[i]['y1'] - map.y,
+					   darknesses.darkness[i]['x2'],
+					   darknesses.darkness[i]['y2']);
 	}
+	p_ctx.globalAlpha = 1;
+	
+	//make health bar flash
+	if(player.inDarkness && player.lanternOn) {
+		// draw flashlight background
+		p_ctx.drawImage(player_imgs[14], player.x - map.x - (player.sizeX * 2), player.y - map.y - (player.sizeY * 2));
+		// redraw blocks
+		for(let i = 0; i < map.tiles.length; i++) {
+			let tile = map.tiles[i];
+			if(tile.x - map.x + player.lanternLightSize > player.x - map.x &&
+			   tile.x - map.x - player.lanternLightSize < player.x + player.sizeX - map.x &&
+			   tile.y - map.y + player.lanternLightSize > player.y - map.y &&
+			   tile.y - map.y - player.lanternLightSize < player.y + player.sizeY - map.y) {
+				p_ctx.drawImage(tile_imgs[tile.img], tile.x - map.x, tile.y - map.y, tile.sizeX, tile.sizeY);
+				if(debug) {
+					p_ctx.strokeRect(tile.x - map.x, tile.y - map.y, tile.sizeX, tile.sizeY);
+					p_ctx.strokeText('['+i+']', tile.x - map.x, tile.y - map.y + tile.sizeY/2);
+				}
+			}
+		}
+	}
+	
+	// draw player
+	p_ctx.drawImage(player_imgs[player.img], player.imgTick * player.sizeX, 0, player.sizeX, player.sizeY, player.x - map.x, player.y - map.y, player.sizeX, player.sizeY);
 	
 	if(debug) {
 		p_ctx.strokeRect(player.x - map.x, player.y - map.y, player.sizeX, player.sizeY);
@@ -519,11 +562,6 @@ function renderPause() {
 	ctx.fillText('PAUSED', canvas.width/2, canvas.height/2);
 	ctx.font = '16px Verdana';
 	ctx.fillText('PRESS P TO RESUME', canvas.width/2, canvas.height/2 + 32);
-}
-
-function renderBlack() {
-	ctx.fillStyle = '#000000';
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
 function renderLevelFade() {

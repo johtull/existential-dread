@@ -11,10 +11,10 @@ c={"x":0,"y":0,"sizeX":32,"sizeY":16,"isSolid":true,"type":"","img":1}
 F={"x":0,"y":0,"sizeX":32,"sizeY":16,"isSolid":false,"type":"jump","img":16,"offsetY":16}
 MAP={"width":64,"height":18,"x":1408,"y":0,"floorX":2048,"floorY":576,"img":0,"nextMap":"maps/map2.txt","music":"audio/music/hopeless_1.wav"}
 SPAWN={"x":62,"y":4,"mod":32}
-DARKNESS={"id":0,"x":0,"y":0,"dir":3,"condType":"time","cond":"0","speed":1,"damage":1}
-DARKNESS={"id":0,"dir":3,"condType":"lantern","cond":"4","speed":2}
-DARKNESS={"id":0,"dir":3,"condType":"lantern","cond":"4","speed":3}
-DARKNESS={"id":0,"dir":3,"condType":"lantern","cond":"5","speed":4}
+DARKNESS={"id":0,"x1":0,"y1":0,"x2":0,"y2":576,"dir":3,"condType":"time","cond":"0","speed":0.2,"damage":1}
+DARKNESS={"id":0,"condType":"lantern","cond":"2","speed":1}
+DARKNESS={"id":0,"condType":"lantern","cond":"4","speed":2}
+DARKNESS={"id":0,"condType":"lantern","cond":"5","speed":3}
 START
 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 Cc                                                             b

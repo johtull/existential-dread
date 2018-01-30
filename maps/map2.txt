@@ -7,6 +7,10 @@ F={"x":0,"y":0,"sizeX":32,"sizeY":16,"isSolid":false,"type":"jump","img":16,"off
 #={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":false,"type":"door","img":15}
 MAP={"width":64,"height":64,"x":608,"y":1728,"floorX":2048,"floorY":2048,"img":1,"nextMap":"maps/map3.txt","music":"audio/music/fear_rising_2.wav"}
 SPAWN={"x":29,"y":62,"mod":32}
+DARKNESS={"id":0,"x1":0,"y1":2048,"x2":2048,"y2":2048,"dir":0,"condType":"time","cond":"0","speed":0.1,"damage":1}
+DARKNESS={"id":0,"condType":"time","cond":"4000","speed":0.5}
+DARKNESS={"id":1,"x1":0,"y1":0,"x2":0,"y2":2048,"dir":3,"condType":"time","cond":"4000","speed":0.25,"damage":1}
+DARKNESS={"id":2,"x1":2048,"y1":0,"x2":2048,"y2":2048,"dir":1,"condType":"time","cond":"4000","speed":0.25,"damage":1}
 START
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %    ~                     ~                                & ~%

@@ -40,6 +40,8 @@ player_imgs.push(loadImage('img/player/idlelanternRIGHT.png', 32, 32));
 player_imgs.push(loadImage('img/player/runlanternLEFT.png', 32, 32));
 player_imgs.push(loadImage('img/player/runlanternRIGHT.png', 32, 32));
 
+player_imgs.push(loadImage('img/player/light.png', 160, 160));
+
 
 var tile_imgs = [];
 tile_imgs.push(loadImage('img/tiles/cityblock.png', 32, 32));
@@ -121,13 +123,17 @@ var player = {
 	lanternParts: 0,
 	batteryCharge: 250,
 	batteryRefill: 100,
-	lanternOut: false
+	lanternOn: false,
+	inDarkness: false,
+	lanternLightSize: 96
 };
 
 var darkness = {
 	id: 0,
-	x: 0,
-	y: 0,
+	x1: 0,//left
+	y1: 0,//top
+	x2: 0,//right
+	y2: 0,//bottom
 	dir: 0, //wasd
 	condType: 'time', //lantern
 	cond: '30', // 3
