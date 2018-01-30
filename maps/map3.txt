@@ -1,8 +1,11 @@
 B={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":true,"type":"","img":5}
 D={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":true,"type":"","img":3}
 ~={"x":0,"y":0,"sizeX":32,"sizeY":32,"isSolid":false,"type":"battery","img":14}
-MAP={"width":64,"height":18,"x":0,"y":96,"floorX":2048,"floorY":576,"img":2,"nextMap":"","music":"audio/music/dreams_into_darkness_3.wav"}
+MAP={"width":64,"height":18,"x":0,"y":96,"floorX":2048,"floorY":576,"img":2,"nextMap":"","music":"audio/music/dreams_into_darkness_3.wav","condType":"countdown","cond":120000}
 SPAWN={"x":2,"y":8,"mod":32}
+DARKNESS={"id":0,"x1":0,"y1":0,"x2":0,"y2":576,"dir":3,"condType":"time","cond":"2000","speed":1.33,"damage":1}
+DARKNESS={"id":0,"condType":"time","cond":"20000","speed":-1.33}
+DARKNESS={"id":0,"condType":"time","cond":"39000","speed":0}
 START
 BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
 B                                                              B

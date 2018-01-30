@@ -32,7 +32,7 @@ function init() {
 				player.isSprinting = true;
 				break;
 			case 70: // F
-				if(player.batteryCharge > 0) {
+				if(player.lanternParts >= 5 && player.batteryCharge > 0) {
 					player.lanternOn = !player.lanternOn;
 				}
 				break;
@@ -157,8 +157,9 @@ function main() {
 		}
 		
 		if(debug) {
-			document.getElementById('player').textContent = JSON.stringify(player);
+			//document.getElementById('player').textContent = JSON.stringify(player);
 			//document.getElementById('map').textContent = JSON.stringify(map);
+			document.getElementById('player').textContent = map.passedMS;
 		}
 		
 		requestAnimationFrame(main);
@@ -305,7 +306,7 @@ function updatePlayer() {
 
 function collision() {
 	let shoves = 0;
-	for(var i = 0; i < map.tiles.length; i++) {
+	for(let i = 0; i < map.tiles.length; i++) {
 		let tile = map.tiles[i];
 		if(tile.isSolid) {
 			// top of object
@@ -399,6 +400,23 @@ function collision() {
 			}
 		}
 	}
+	//battery list
+	for(let i = 0; i < map.batteries.length; i++) {
+		let tile = map.batteries[i];
+		if((player.x < tile.x + tile.sizeX) &&
+		   (player.x + player.sizeX > tile.x) &&
+		   (player.y < tile.y + tile.sizeY) &&
+		   (player.y + player.sizeY - 1 > tile.y)) {
+				if(tile.type === 'battery') {
+					player.batteryCharge += player.batteryRefill;
+					if(isSoundEnabled) {
+						playSound('gong');
+					}
+					map.batteries.splice(i,1);
+				}
+		   }
+	}
+	
 	if(shoves > 1) {
 		player.x = player.lastX;
 		player.y = player.lastY;
@@ -435,28 +453,29 @@ function updateDarkness() {
 		}
 	}
 	for(let i = 0; i < darknesses.darkness.length; i++) {
-		if(darknesses.darkness[i].speed === 0) {
+		let dark = darknesses.darkness[i];
+		if(dark.speed === 0) {
 			continue;
 		}
-		switch(darknesses.darkness[i].dir) {
+		switch(dark.dir) {
 			case 0: //up
-				if(darknesses.darkness[i]['y1'] > 0) {
-					darknesses.darkness[i]['y1'] -= darknesses.darkness[i]['speed'];
+				if(dark.y1 >= 0 && dark.y1 <= map.floorY) {
+					darknesses.darkness[i]['y1'] -= dark.speed;
 				}
 				break;
 			case 1: //left
-				if(darknesses.darkness[i]['x1'] > 0) {
-					darknesses.darkness[i]['x1'] -= darknesses.darkness[i]['speed'];
+				if(dark.x1 >= 0 && dark.x1 <= map.floorX) {
+					darknesses.darkness[i]['x1'] -= dark.speed;
 				}
 				break;
 			case 2: //down
-				if(darknesses.darkness[i]['y2'] <= map.floorY) {
-					darknesses.darkness[i]['y2'] += darknesses.darkness[i]['speed'];
+				if(dark.y2 <= map.floorY && dark.y2 >= map.floorY) {
+					darknesses.darkness[i]['y2'] += dark.speed;
 				}
 				break;
 			case 3: //right
-				if(darknesses.darkness[i]['x2'] <= map.floorX) {
-					darknesses.darkness[i]['x2'] += darknesses.darkness[i]['speed'];
+				if(dark.x2 <= map.floorX && dark.x2 >= 0) {
+					darknesses.darkness[i]['x2'] += dark.speed;
 				}
 				break;
 			default:
@@ -484,7 +503,7 @@ function draw() {
 	}
 	
 	// draw tiles
-	for(var i = 0; i < map.tiles.length; i++) {
+	for(let i = 0; i < map.tiles.length; i++) {
 		let tile = map.tiles[i];
 		if(tile.x - map.x < map.screenX && tile.y - map.y < map.screenY) {
 			p_ctx.drawImage(tile_imgs[tile.img], tile.x - map.x, tile.y - map.y, tile.sizeX, tile.sizeY);
@@ -526,9 +545,20 @@ function draw() {
 		}
 	}
 	
+	// render batteries - GLOW IN DARKNESS
+	for(let i = 0; i < map.batteries.length; i++) {
+		let tile = map.batteries[i];
+		if(tile.x - map.x < map.screenX && tile.y - map.y < map.screenY) {
+			p_ctx.drawImage(tile_imgs[tile.img], tile.x - map.x, tile.y - map.y, tile.sizeX, tile.sizeY);
+			if(debug) {
+				p_ctx.strokeRect(tile.x - map.x, tile.y - map.y, tile.sizeX, tile.sizeY);
+				p_ctx.strokeText('['+i+']', tile.x - map.x, tile.y - map.y + tile.sizeY/2);
+			}
+		}
+	}
+	
 	// draw player
 	p_ctx.drawImage(player_imgs[player.img], player.imgTick * player.sizeX, 0, player.sizeX, player.sizeY, player.x - map.x, player.y - map.y, player.sizeX, player.sizeY);
-	
 	if(debug) {
 		p_ctx.strokeRect(player.x - map.x, player.y - map.y, player.sizeX, player.sizeY);
 	}
@@ -547,6 +577,14 @@ function draw() {
 		p_ctx.fillRect(507,40,100,10);
 		p_ctx.fillStyle = "#FFFF00";
 		p_ctx.fillRect(510,37,player.batteryCharge/10,10);
+	}
+	if(map.condType === 'countdown') {
+		p_ctx.fillStyle = "#000000";
+		p_ctx.fillRect(507,55,52,23);
+		p_ctx.font = '24px Verdana';
+		p_ctx.textAlign = 'center';
+		p_ctx.fillStyle = "#FF0000";
+		p_ctx.fillText(Math.trunc((map.cond - map.passedMS) / 1000), 533, 75);
 	}
 	
 	// render pre-rendered canvas

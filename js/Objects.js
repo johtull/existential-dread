@@ -96,7 +96,10 @@ var map = {
 	alpha: 0,
 	fadeImg: '',
 	nextMap: 'maps/map1.txt',
-	tiles: []
+	condType: '',
+	cond: '',
+	tiles: [],
+	batteries: []
 };
 
 var player = {

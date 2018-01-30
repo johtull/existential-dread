@@ -5,9 +5,10 @@ LoadMapJS = {
 			return;
 		}
 		
-		let tileMap = [];
+		let tileList = [];
 		let keyMap = {};
 		let darkList = [];
+		let batteryList = [];
 		
 		fetch(path)
 			.then(function(resp) {
@@ -49,8 +50,11 @@ LoadMapJS = {
 								}else {
 									tmpTile.y = (h - mapStartH) * 32;
 								}
-								
-								tileMap.push(Object.assign({}, tmpTile));
+								if(tmpTile.type === 'battery') {
+									batteryList.push(Object.assign({}, tmpTile));
+								}else {
+									tileList.push(Object.assign({}, tmpTile));
+								}
 							}else {
 								continue;
 							}
@@ -64,8 +68,11 @@ LoadMapJS = {
 				map.floorY = keyMap['MAP'].floorY;
 				map.img = keyMap['MAP'].img;
 				map.nextMap = keyMap['MAP'].nextMap;
-				map.tiles = tileMap;
+				map.tiles = tileList;
+				map.batteries = batteryList;
 				map.passedMS = 0;
+				map.condType = keyMap['MAP'].condType;
+				map.cond = keyMap['MAP'].cond;
 			
 				wasd = [false, false, false, false];
 				player.vertSpeed = 0;
