@@ -516,8 +516,9 @@ function draw() {
 	
 	// darkness
 	p_ctx.strokeStyle = "#000000";
-	p_ctx.globalAlpha = 0.95;
 	for(let i = 0; i < darknesses.darkness.length; i++) {
+		// darkness pulsing
+		p_ctx.globalAlpha = Math.random() * (1 - 0.6) + 0.6;
 		p_ctx.fillRect(darknesses.darkness[i]['x1'] - map.x,
 					   darknesses.darkness[i]['y1'] - map.y,
 					   darknesses.darkness[i]['x2'],
