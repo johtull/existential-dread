@@ -100,12 +100,16 @@ function init() {
 	
 	isLoadNextMap = true;
 	
-	renderTitle(0);
-	setTimeout(function(){ playSound('hurrrr'); }, 1000);
+	setTimeout(function(){
+		renderTitle(0);
+		setTimeout(function(){ playSound('hurrrr'); }, 1000);
+		
+		setTimeout(function() {
+			renderMainTitle();
+		}, 4000);
+	}, 1000);
 	
-	setTimeout(function() {
-		renderMainTitle();
-	}, 4000);
+	
 }
 function resetGame() {
 	isGameOver = false;
