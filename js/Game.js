@@ -36,15 +36,7 @@ function init() {
 					player.lanternOn = !player.lanternOn;
 				}
 				break;
-			case 77:
-				//soundEnabled = !soundEnabled;
-				break;
-			case 219: // [
-				player.pt ++;
-				break;
-			case 221: // ]
-				break;
-			case 75: // K
+			case 81: // Q
 				isGameOver = true;
 				break;
 			case 80: // P - pause
@@ -89,11 +81,7 @@ function init() {
 				break;
 		}
 	}, false);
-}
-
-function initGame() {
 	
-	document.getElementById("run-btn").remove();
 	
 	isGameOver = false;
 	isPaused = false;
@@ -112,12 +100,43 @@ function initGame() {
 	
 	isLoadNextMap = true;
 	
+	renderTitle(0);
+	setTimeout(function(){ playSound('hurrrr'); }, 1000);
+	
+	setTimeout(function() {
+		renderMainTitle();
+	}, 4000);
+}
+function resetGame() {
+	isGameOver = false;
+	
+	document.getElementById('title').className = 'hidden';
+	document.getElementById('back').className = 'hidden';
+	document.getElementById('gameover').className = 'hidden';
+	
+	wasd = [false, false, false, false];
+	player.health = player.statMax;
+	player.stamina = player.statMax;
+	player.vertSpeed = 0;
+	player.isJumping = false;
+	player.inDarkness = false;
+	player.imgTick = 0;
+	player.img = 2;
+	player.isLeft = true;
+	player.lanternParts = 0;
+	player.batteryCharge = 250;
+	
+	map.nextMap = 'maps/map1.txt';
+	isLoadNextMap = true;
+	
 	main();
 }
 function main() {
 	if(isGameOver) {
-		//renderGameOver();
-		alert("The game is over.");
+		renderTitle(5);
+		stopMusic();
+		document.getElementById('back').className = 'hidden';
+		document.getElementById('gameover').className = '';
 	}else if(isLoadNextMap) {
 		stopMusic()
 		
@@ -126,7 +145,7 @@ function main() {
 		img.src = data;
 		map.fadeImg = img;
 		
-		renderLevelFade(); 
+		renderLevelFade();
 		
 		isLoadNextMap = false;
 		
@@ -157,9 +176,12 @@ function main() {
 		}
 		
 		if(map.condType === 'countdown') {
-			if(Number(map.cond) < 0) {
-				isPaused = true;
-				alert("GAME OVER");
+			if(Number(map.cond) - map.passedMS < 0) {
+				renderTitle(6);
+				stopMusic();
+				document.getElementById('back').className = 'hidden';
+				document.getElementById('gameover').className = '';
+				return;
 			}
 		}
 		
@@ -309,6 +331,10 @@ function updatePlayer() {
 	}else if(player.batteryCharge > player.statMax) {
 		player.batteryCharge = player.statMax;
 	}
+	
+	if(player.health <= 0) {
+		isGameOver = true;
+	}
 }
 
 function collision() {
@@ -437,6 +463,9 @@ function collision() {
 		   (player.y < e.y2 && e.dir === 2) ||
 		   (player.x < e.x2 && e.dir === 3)) {
 			   player.inDarkness = true;
+			   if(!player.lanternOn) {
+				   player.health -= e.damage;
+			   }
 		   }
 	});
 }
@@ -636,4 +665,32 @@ function renderLevelFade() {
 	
 	/// loop using rAF
 	requestAnimationFrame(renderLevelFade);
+}
+function renderTitle(img) {
+	ctx.drawImage(title_imgs[img], 0, 0, 640, 480);
+	if(img === 1) {
+		document.getElementById('title').className = '';
+		document.getElementById('back').className = 'hidden';
+		document.getElementById('gameover').className = 'hidden';
+	}else if(img > 1) {
+		document.getElementById('title').className = 'hidden';
+		document.getElementById('back').className = '';
+	}
+}
+function renderMainTitle() {
+	renderTitle(1);
+	if(isSoundEnabled) {
+		loopMusic('audio/music/existential_dread_0.wav');
+	}
+	document.getElementById('title').className = '';
+	document.getElementById('back').className = 'hidden';
+	document.getElementById('gameover').className = 'hidden';
+}
+function toggleSounds() {
+	isSoundEnabled = !isSoundEnabled;
+	if(isSoundEnabled) {
+		startMusic();
+	}else {
+		stopMusic();
+	}
 }

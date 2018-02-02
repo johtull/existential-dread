@@ -5,7 +5,7 @@ var ctx = {};
 
 var isGameOver = false;
 var isPaused = false;
-var isSoundEnabled = false;
+var isSoundEnabled = true;
 var isLoadNextMap = false;
 
 var tick = new Date();
@@ -67,6 +67,14 @@ tile_imgs.push(loadImage('img/tiles/TRAMPOLINE_HALF.png', 32, 32));
 tile_imgs.push(loadImage('img/tiles/oomlie.png', 32, 32));
 tile_imgs.push(loadImage('img/tiles/ThomasMural.png', 32, 32));
 
+var title_imgs = [];
+title_imgs.push(loadImage('img/titles/HurrrrDeerStudios.png', 640, 480));
+title_imgs.push(loadImage('img/titles/title.png', 640, 480));
+title_imgs.push(loadImage('img/titles/instructions.png', 640, 480));
+title_imgs.push(loadImage('img/titles/story.png', 640, 480));
+title_imgs.push(loadImage('img/titles/credits.png', 640, 480));
+title_imgs.push(loadImage('img/titles/game_over.png', 640, 480));
+title_imgs.push(loadImage('img/titles/victory.png', 640, 480));
 
 var tile = {
 	x: 0,
@@ -93,9 +101,9 @@ var map = {
 	img: 0,
 	tickMS: 100,
 	passedMS: 0,
-	alpha: 0,
+	alpha: 1,
 	fadeImg: '',
-	nextMap: 'maps/map3.txt',
+	nextMap: 'maps/map1.txt',
 	condType: '',
 	cond: '',
 	tiles: [],
@@ -179,9 +187,14 @@ function stopMusic() {
 	music.pause();
 	music.currentTime = 0;
 }
+function startMusic() {
+	music.play();
+	music.currentTime = 0;
+}
 
 // sfx
 var gong = new Audio('audio/sfx/clank.wav');
+var hurrrr = new Audio('audio/sfx/hurrrr.wav');
 
 // music
 var music = new Audio();

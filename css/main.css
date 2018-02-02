@@ -10,16 +10,40 @@ html {
 body {
 	text-align: center;
 }
+.container {
+	display: inline-block;
+	position: relative;
+	margin: 20px auto;
+}
 canvas {
 	display: block;
-	/*position: absolute;*/
-	margin: auto;
 	top: 0;
 	bottom: 0;
 	right: 0;
 	left: 0;
 }
+#title {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+#back,
+#gameover {
+	position: absolute;
+	bottom: 0;
+	left: 64px;
+}
 button {
+	margin: 5px;
 	padding: 4px;
-	color: black;
+	color: white;
+	background-color: blue;
+	border: 1px solid white;
+	border-radius: 4px;
+}
+ul {
+	list-style: none;
+}
+.hidden {
+	display: none;
 }
