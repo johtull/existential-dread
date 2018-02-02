@@ -5,7 +5,7 @@ var ctx = {};
 
 var isGameOver = false;
 var isPaused = false;
-var isSoundEnabled = true;
+var isSoundEnabled = false;
 var isLoadNextMap = false;
 
 var tick = new Date();
@@ -95,7 +95,7 @@ var map = {
 	passedMS: 0,
 	alpha: 0,
 	fadeImg: '',
-	nextMap: 'maps/map1.txt',
+	nextMap: 'maps/map3.txt',
 	condType: '',
 	cond: '',
 	tiles: [],

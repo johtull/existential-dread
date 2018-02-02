@@ -156,6 +156,13 @@ function main() {
 			}
 		}
 		
+		if(map.condType === 'countdown') {
+			if(Number(map.cond) < 0) {
+				isPaused = true;
+				alert("GAME OVER");
+			}
+		}
+		
 		if(debug) {
 			//document.getElementById('player').textContent = JSON.stringify(player);
 			//document.getElementById('map').textContent = JSON.stringify(map);
@@ -469,7 +476,7 @@ function updateDarkness() {
 				}
 				break;
 			case 2: //down
-				if(dark.y2 <= map.floorY && dark.y2 >= map.floorY) {
+				if(dark.y2 <= map.floorY && dark.y2 >= 0) {
 					darknesses.darkness[i]['y2'] += dark.speed;
 				}
 				break;
@@ -518,13 +525,13 @@ function draw() {
 	p_ctx.strokeStyle = "#000000";
 	for(let i = 0; i < darknesses.darkness.length; i++) {
 		// darkness pulsing
-		p_ctx.globalAlpha = Math.random() * (1 - 0.8) + 0.8;
+		//p_ctx.globalAlpha = Math.random() * (1 - 0.95) + 0.95;
 		p_ctx.fillRect(darknesses.darkness[i]['x1'] - map.x,
 					   darknesses.darkness[i]['y1'] - map.y,
 					   darknesses.darkness[i]['x2'],
 					   darknesses.darkness[i]['y2']);
 	}
-	p_ctx.globalAlpha = 1;
+	//p_ctx.globalAlpha = 1;
 	
 	//make health bar flash
 	if(player.inDarkness && player.lanternOn) {
