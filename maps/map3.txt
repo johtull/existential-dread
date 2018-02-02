@@ -21,8 +21,8 @@ DARKNESS={"id":3,"condType":"time","cond":"69000","speed":0.10}
 DARKNESS={"id":1,"x1":0,"y1":576,"x2":2048,"y2":576,"condType":"time","cond":"68000","speed":0.10}
 DARKNESS={"id":1,"condType":"time","cond":"71000","speed":0}
 DARKNESS={"id":3,"condType":"time","cond":"70500","speed":0}
-DARKNESS={"id":2,"x1":2048,"y1":0,"x2":2048,"y2":576,"condType":"time","cond":"71000","speed":5,"damage":10}
 DARKNESS={"id":0,"condType":"time","cond":"71000","speed":-5}
+DARKNESS={"id":2,"x1":2048,"y1":0,"x2":2048,"y2":576,"condType":"time","cond":"71000","speed":5,"damage":10}
 START
 BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
 B                                                              B
