@@ -1,4 +1,5 @@
 var debug = false;
+var debugTiles = false;
 
 var canvas = {};
 var ctx = {};
@@ -131,6 +132,9 @@ var player = {
 	statMax: 1000,
 	health: 1000,
 	stamina: 1000,
+	isExhausted: false,
+	exhaustedTicks: 10,
+	exhaustedTicksMax: 10,
 	lanternParts: 0,
 	batteryCharge: 250,
 	batteryRefill: 100,

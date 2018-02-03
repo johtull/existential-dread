@@ -5,12 +5,12 @@ function init() {
 			case 87:
 			case 32:
 				wasd[0] = true;
-				if(map.gravityOn && !player.isJumping) {
+				if(map.gravityOn && !player.isJumping && !player.isExhausted) {
 					player.isJumping = true;
 					player.lastX = player.x;
 					player.lastY = player.y;
 					if(player.isSprinting) {
-						player.stamina -= 100;
+						player.stamina -= 50;
 						player.vertSpeed = player.defaultSprintJumpSpeed;
 					}else {
 						player.vertSpeed = map.gravitySpeed * -1;
@@ -29,7 +29,9 @@ function init() {
 				player.isLeft = false;
 				break;
 			case 16:
-				player.isSprinting = true;
+				if(!player.isExhausted && player.stamina > 0) {
+					player.isSprinting = true;
+				}
 				break;
 			case 70: // F
 				if(player.lanternParts >= 5 && player.batteryCharge > 0) {
@@ -100,14 +102,18 @@ function init() {
 	
 	isLoadNextMap = true;
 	
-	setTimeout(function(){
-		renderTitle(0);
-		setTimeout(function(){ playSound('hurrrr'); }, 1000);
-		
-		setTimeout(function() {
-			renderMainTitle();
-		}, 4000);
-	}, 1000);
+	if(!debug) {
+		setTimeout(function(){
+			renderTitle(0);
+			setTimeout(function(){ playSound('hurrrr'); }, 1000);
+			
+			setTimeout(function() {
+				renderMainTitle();
+			}, 4000);
+		}, 1000);
+	}else {
+		renderMainTitle();
+	}
 	
 	
 }
@@ -168,13 +174,12 @@ function main() {
 			if(player.imgTick > player.imgTickMax) {
 				player.imgTick = 0;
 				
-				if(player.lanternOn) {
-					player.batteryCharge -= 10;
-				}
-				if(player.isSprinting) {
-					player.stamina -= 100;
-				}else if(player.stamina < player.statMax) {
-					player.stamina += 25;
+				if(player.isExhausted) {
+					player.exhaustedTicks--;
+					if(player.exhaustedTicks < 0) {
+						player.exhaustedTicks = player.exhaustedTicksMax;
+						player.isExhausted = false;
+					}
 				}
 			}
 		}
@@ -226,46 +231,42 @@ function updatePlayer() {
 	if(map.x < 0) {
 		map.x = 0;
 	}
-	/* else if(map.x > (map.floorX/2) + player.sizeX) {
-		map.x = (map.floorX/2) + player.sizeX;
-	} */
 	if(map.y < 0) {
 		map.y = 0;
 	} else if(map.y > map.floorY - map.screenY) {
 		map.y = map.floorY - map.screenY;
 	}
-	/* else if(map.y > (map.floorY/2) + 32) {
-		map.y = (map.floorY/2) + 32;
-	} */
 	
 	// direction increment || boundary enforcement
 	// reset player speed modifiers
 	player.speed = player.defaultSpeed;
 	
-	if(wasd[3] || player.x < 0) {
-		if (player.isSprinting) {// && (player.getStam() > 0)) {
-			player.speed = player.defaultSprintSpeed;
+	if(!player.isExhausted) {
+		if(wasd[3] || player.x < 0) {
+			if (player.isSprinting) {// && (player.getStam() > 0)) {
+				player.speed = player.defaultSprintSpeed;
+			}
+			player.x += player.speed;
 		}
-		player.x += player.speed;
-	}
-	if(wasd[1] || player.x > map.floorX) {
-		if (player.isSprinting) {// && (player.getStam() > 0)) {
-			player.speed = player.defaultSprintSpeed;
+		if(wasd[1] || player.x > map.floorX) {
+			if (player.isSprinting) {// && (player.getStam() > 0)) {
+				player.speed = player.defaultSprintSpeed;
+			}
+			player.x -= player.speed;
 		}
-		player.x -= player.speed;
+		if(!map.gravityOn) {
+			if(wasd[2] || player.y < 0) {
+				player.y += player.speed;
+			}
+		}
+		if(!map.gravityOn && (wasd[0] || player.y > map.floorY)) {
+			player.y -= player.speed;
+		}
+		if(player.y > map.floorY) {
+			player.y = map.floorY - player.sizeY;
+		}
 	}
-	if(!map.gravityOn) {
-        if(wasd[2] || player.y < 0) {
-            player.y += player.speed;
-        }
-	}
-	if(!map.gravityOn && (wasd[0] || player.y > map.floorY)) {
-		player.y -= player.speed;
-	}
-	if(player.y > map.floorY) {
-		player.y = map.floorY - player.sizeY;
-	}
-	
+		
 	if(map.gravityOn) {
 		if(player.y < map.floorY) {
 			player.vertSpeed++;
@@ -280,44 +281,52 @@ function updatePlayer() {
 	}
 	
 	// animATION
-	if(wasd[0] && player.isJumping) {
+	if(player.isExhausted) {
 		if(player.isLeft) {
-			player.img = 8;
+			player.img = 6;
 		}else {
-			player.img = 9;
+			player.img = 7;
 		}
-	}else if(wasd[1]) {
-		if(player.lanternOn) {
-			player.img = 12;
-		}else {
-			player.img = 2;
-		}
-	}else if(wasd[2]) {
-		if(player.isLeft) {
-			player.img = 4;
-		}else {
-			player.img = 5;
-		}
-	}else if(wasd[3]) {
-		if(player.lanternOn) {
-			player.img = 13;
-		}else {
-			player.img = 3;
-		}
-	}
-	
-	if((!player.isJumping && !wasd[1] && !wasd[2] && !wasd[3]) || (wasd[1] && wasd[3])) {
-		if(player.lanternOn) {
+	}else {
+		if(wasd[0] && player.isJumping) {
 			if(player.isLeft) {
-				player.img = 10;
+				player.img = 8;
 			}else {
-				player.img = 11;
+				player.img = 9;
 			}
-		}else {
-			if(player.isLeft) {
-				player.img = 0;
+		}else if(wasd[1]) {
+			if(player.lanternOn) {
+				player.img = 12;
 			}else {
-				player.img = 1;
+				player.img = 2;
+			}
+		}else if(wasd[2]) {
+			if(player.isLeft) {
+				player.img = 4;
+			}else {
+				player.img = 5;
+			}
+		}else if(wasd[3]) {
+			if(player.lanternOn) {
+				player.img = 13;
+			}else {
+				player.img = 3;
+			}
+		}
+		
+		if((!player.isJumping && !wasd[1] && !wasd[2] && !wasd[3]) || (wasd[1] && wasd[3])) {
+			if(player.lanternOn) {
+				if(player.isLeft) {
+					player.img = 10;
+				}else {
+					player.img = 11;
+				}
+			}else {
+				if(player.isLeft) {
+					player.img = 0;
+				}else {
+					player.img = 1;
+				}
 			}
 		}
 	}
@@ -326,20 +335,31 @@ function updatePlayer() {
 	// STATS
 	if(player.stamina < 0) {
 		player.stamina = 0;
+		player.isExhausted = true;
+		player.isSprinting = false;
 	}else if(player.stamina > player.statMax) {
 		player.stamina = player.statMax;
 	}
+	if(player.isSprinting) {
+		player.stamina -= 5;
+	}else if(player.stamina < player.statMax) {
+		player.stamina += 2;
+	}
+	// lantern
 	if(player.batteryCharge < 0) {
 		player.batteryCharge = 0;
 		player.lanternOn = false;
 	}else if(player.batteryCharge > player.statMax) {
 		player.batteryCharge = player.statMax;
 	}
-	
+	if(player.lanternOn) {
+		player.batteryCharge--;
+	}
+	// hp
 	if(player.health <= 0) {
 		isGameOver = true;
 	}
-}
+}//updatePlayer
 
 function collision() {
 	let shoves = 0;
@@ -538,7 +558,7 @@ function draw() {
 	// draw map
 	p_ctx.drawImage(bg_imgs[map.img], (map.x * -1), (map.y * -1), map.floorX, map.floorY);
 	
-	if(debug) {
+	if(debugTiles) {
 		p_ctx.strokeStyle = "#FF0000";
 	}
 	
@@ -547,7 +567,7 @@ function draw() {
 		let tile = map.tiles[i];
 		if(tile.x - map.x < map.screenX && tile.y - map.y < map.screenY) {
 			p_ctx.drawImage(tile_imgs[tile.img], tile.x - map.x, tile.y - map.y, tile.sizeX, tile.sizeY);
-			if(debug) {
+			if(debugTiles) {
 				p_ctx.strokeRect(tile.x - map.x, tile.y - map.y, tile.sizeX, tile.sizeY);
 				p_ctx.strokeText('['+i+']', tile.x - map.x, tile.y - map.y + tile.sizeY/2);
 			}
@@ -578,7 +598,7 @@ function draw() {
 			   tile.y - map.y + player.lanternLightSize > player.y - map.y &&
 			   tile.y - map.y - player.lanternLightSize < player.y + player.sizeY - map.y) {
 				p_ctx.drawImage(tile_imgs[tile.img], tile.x - map.x, tile.y - map.y, tile.sizeX, tile.sizeY);
-				if(debug) {
+				if(debugTiles) {
 					p_ctx.strokeRect(tile.x - map.x, tile.y - map.y, tile.sizeX, tile.sizeY);
 					p_ctx.strokeText('['+i+']', tile.x - map.x, tile.y - map.y + tile.sizeY/2);
 				}
@@ -591,7 +611,7 @@ function draw() {
 		let tile = map.batteries[i];
 		if(tile.x - map.x < map.screenX && tile.y - map.y < map.screenY) {
 			p_ctx.drawImage(tile_imgs[tile.img], tile.x - map.x, tile.y - map.y, tile.sizeX, tile.sizeY);
-			if(debug) {
+			if(debugTiles) {
 				p_ctx.strokeRect(tile.x - map.x, tile.y - map.y, tile.sizeX, tile.sizeY);
 				p_ctx.strokeText('['+i+']', tile.x - map.x, tile.y - map.y + tile.sizeY/2);
 			}
@@ -600,7 +620,7 @@ function draw() {
 	
 	// draw player
 	p_ctx.drawImage(player_imgs[player.img], player.imgTick * player.sizeX, 0, player.sizeX, player.sizeY, player.x - map.x, player.y - map.y, player.sizeX, player.sizeY);
-	if(debug) {
+	if(debugTiles) {
 		p_ctx.strokeRect(player.x - map.x, player.y - map.y, player.sizeX, player.sizeY);
 	}
 	
